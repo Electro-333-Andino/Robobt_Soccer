@@ -31,23 +31,23 @@ void setup() {
     Serial.begin(SERIAL_BAUDRATE);
     delay(100);
 
-    Serial.println("\n\n=== INICIANDO SISTEMA ===");
+    Serial.println(F("\n\n=== INICIANDO SISTEMA ==="));
 
     // Inicializar robot (motores)
     robot.init();
 
     // Inicializar Bluetooth
     if (!bluetooth.init()) {
-        Serial.println("[ERROR CRÍTICO] Bluetooth falló");
+        Serial.println(F("[ERROR CRÍTICO] Bluetooth falló"));
         while (1) {
             delay(1000);
-            Serial.print(".");
+            Serial.print(F("."));
         }
     }
 
     // Mostrar mensaje de bienvenida
     bluetooth.printWelcome();
-    Serial.println("[SISTEMA] Listo para recibir comandos\n");
+    Serial.println(F("[SISTEMA] Listo para recibir comandos\n"));
 }
 
 // ==================== LOOP ====================
@@ -62,7 +62,7 @@ void loop() {
     if (millis() - lastBTCheck > BT_HEALTH_CHECK) {
         lastBTCheck = millis();
         if (!bluetooth.isConnected()) {
-            Serial.println("[BT] Cliente no conectado, reiniciando Bluetooth...");
+            Serial.println(F("[BT] Cliente no conectado, reiniciando Bluetooth..."));
             bluetooth.init();
         }
     }
@@ -78,16 +78,16 @@ void loop() {
 
         // Filtrar caracteres fuera del rango ASCII imprimible
         if (cmd < 32 || cmd > 126) {
-            Serial.printf("[BT] Carácter no válido: 0x%02X\n", (uint8_t)cmd);
+            Serial.printf(F("[BT] Carácter no válido: 0x%02X\n"), (uint8_t)cmd);
             robot.executeCommand('S');  // Detener por seguridad
             bluetooth.incrementInvalidCount();
             return;
         }
 
         // Ejecutar comando
-        Serial.printf("[CMD] '%c' | ", cmd);
+        Serial.printf(F("[CMD] '%c' | "), cmd);
         if (!robot.executeCommand(cmd)) {
-            Serial.println("INVÁLIDO");
+            Serial.println(F("INVÁLIDO"));
             bluetooth.incrementInvalidCount();
         }
     }

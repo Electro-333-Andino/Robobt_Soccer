@@ -19,12 +19,12 @@ bool BluetoothHandler::init() {
     }
 
     if (!bt.begin(deviceName)) {
-        Serial.println("[BT ERROR] No se pudo inicializar Bluetooth");
+        Serial.println(F("[BT ERROR] No se pudo inicializar Bluetooth"));
         return false;
     }
 
     initialized = true;
-    Serial.println("[BT OK] Bluetooth inicializado correctamente");
+    Serial.println(F("[BT OK] Bluetooth inicializado correctamente"));
     return true;
 }
 
@@ -46,7 +46,7 @@ char BluetoothHandler::readCommand() {
             delay(1);  // yield cooperativo
         }
         if (clearCount > 0) {
-            Serial.printf("[BT INFO] Buffer drenado (%d bytes)\n", clearCount);
+            Serial.printf(F("[BT INFO] Buffer drenado (%d bytes)\n"), clearCount);
         }
     }
 
@@ -61,32 +61,32 @@ void BluetoothHandler::checkHealth() {
     if (!bt.hasClient() && lastMessageTime > 0) {
         if (millis() - lastMessageTime > 5000) {
             connectionLostCount++;
-            Serial.println("[BT] Cliente desconectado");
+            Serial.println(F("[BT] Cliente desconectado"));
             lastMessageTime = 0;
         }
     }
 }
 
 void BluetoothHandler::printWelcome() {
-    Serial.println("==========================================");
-    Serial.println("ESP32 Control de Motores v3.2 (Modular)");
-    Serial.printf("Nombre BT: %s\n", deviceName.c_str());
-    Serial.println("==========================================");
-    Serial.println("Comandos: F (adelante), B (atrás), L (izq), R (der), S (stop)");
-    Serial.printf("Timeout seguridad: %dms\n", SAFETY_TIMEOUT);
-    Serial.println("Estado inicial: MOTORES APAGADOS");
-    Serial.println("==========================================");
+    Serial.println(F("=========================================="));
+    Serial.println(F("ESP32 Control de Motores v3.2 (Modular)"));
+    Serial.printf(F("Nombre BT: %s\n"), deviceName.c_str());
+    Serial.println(F("=========================================="));
+    Serial.println(F("Comandos: F (adelante), B (atrás), L (izq), R (der), S (stop)"));
+    Serial.printf(F("Timeout seguridad: %dms\n"), SAFETY_TIMEOUT);
+    Serial.println(F("Estado inicial: MOTORES APAGADOS"));
+    Serial.println(F("=========================================="));
 }
 
 void BluetoothHandler::printStats() {
-    Serial.println("\n--- ESTADÍSTICAS ---");
-    Serial.printf("Mensajes recibidos: %d\n", messagesReceived);
-    Serial.printf("Comandos inválidos: %d\n", invalidCommandCount);
-    Serial.printf("Cliente conectado: %s\n", isConnected() ? "SÍ" : "NO");
-    Serial.printf("Conexiones perdidas: %d\n", connectionLostCount);
-    Serial.printf("Uptime: %lu s\n", millis() / 1000);
-    Serial.printf("Memoria libre: %d bytes\n", ESP.getFreeHeap());
-    Serial.println("--------------------\n");
+    Serial.println(F("\n--- ESTADÍSTICAS ---"));
+    Serial.printf(F("Mensajes recibidos: %d\n"), messagesReceived);
+    Serial.printf(F("Comandos inválidos: %d\n"), invalidCommandCount);
+    Serial.printf(F("Cliente conectado: %s\n"), isConnected() ? "SÍ" : "NO");
+    Serial.printf(F("Conexiones perdidas: %d\n"), connectionLostCount);
+    Serial.printf(F("Uptime: %lu s\n"), millis() / 1000);
+    Serial.printf(F("Memoria libre: %d bytes\n"), ESP.getFreeHeap());
+    Serial.println(F("--------------------\n"));
 }
 
 bool BluetoothHandler::isConnected() {

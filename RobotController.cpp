@@ -18,41 +18,41 @@ RobotController::RobotController(uint8_t in1, uint8_t in2, uint8_t ena,
 void RobotController::init() {
     motorA.init();
     motorB.init();
-    Serial.println("[ROBOT] Inicializado en modo SEGURO (motores apagados)");
+    Serial.println(F("[ROBOT] Inicializado en modo SEGURO (motores apagados)"));
 }
 
 void RobotController::moveForward() {
     motorA.forward(VEL_ADELANTE_A);
     motorB.forward(VEL_ADELANTE_B);
     updateCommandTime();
-    Serial.printf("-> Adelante (A:%d, B:%d)\n", VEL_ADELANTE_A, VEL_ADELANTE_B);
+    Serial.printf(F("-> Adelante (A:%d, B:%d)\n"), VEL_ADELANTE_A, VEL_ADELANTE_B);
 }
 
 void RobotController::moveBackward() {
     motorA.backward(VEL_ATRAS_A);
     motorB.backward(VEL_ATRAS_B);
     updateCommandTime();
-    Serial.printf("-> Atrás (A:%d, B:%d)\n", VEL_ATRAS_A, VEL_ATRAS_B);
+    Serial.printf(F("-> Atrás (A:%d, B:%d)\n"), VEL_ATRAS_A, VEL_ATRAS_B);
 }
 
 void RobotController::turnLeft() {
     motorA.backward(VEL_IZQUIERDA_A);
     motorB.forward(VEL_IZQUIERDA_B);
     updateCommandTime();
-    Serial.printf("-> Izquierda (A:%d, B:%d)\n", VEL_IZQUIERDA_A, VEL_IZQUIERDA_B);
+    Serial.printf(F("-> Izquierda (A:%d, B:%d)\n"), VEL_IZQUIERDA_A, VEL_IZQUIERDA_B);
 }
 
 void RobotController::turnRight() {
     motorA.forward(VEL_DERECHA_A);
     motorB.backward(VEL_DERECHA_B);
     updateCommandTime();
-    Serial.printf("-> Derecha (A:%d, B:%d)\n", VEL_DERECHA_A, VEL_DERECHA_B);
+    Serial.printf(F("-> Derecha (A:%d, B:%d)\n"), VEL_DERECHA_A, VEL_DERECHA_B);
 }
 
 void RobotController::stopMotors() {
     motorA.stop();
     motorB.stop();
-    Serial.println("-> Motores detenidos");
+    Serial.println(F("-> Motores detenidos"));
 }
 
 bool RobotController::executeCommand(char cmd) {
@@ -89,7 +89,7 @@ bool RobotController::executeCommand(char cmd) {
             return true;
         default:
             stopMotors();
-            Serial.printf("[SEGURIDAD] Comando desconocido '%c'\n", cmd);
+            Serial.printf(F("[SEGURIDAD] Comando desconocido '%c'\n"), cmd);
             return false;
     }
 }
@@ -102,7 +102,7 @@ void RobotController::checkSafety() {
     if (motorsActive && lastCommandTime > 0) {
         if (millis() - lastCommandTime > SAFETY_TIMEOUT) {
             stopMotors();
-            Serial.println("[SEGURIDAD] Timeout - motores detenidos");
+            Serial.println(F("[SEGURIDAD] Timeout - motores detenidos"));
             lastCommandTime = 0;
         }
     }
@@ -110,7 +110,7 @@ void RobotController::checkSafety() {
 
 void RobotController::setSafetyMode(bool enabled) {
     safetyEnabled = enabled;
-    Serial.printf("[SEGURIDAD] %s\n", enabled ? "ACTIVADO" : "DESACTIVADO");
+    Serial.printf(F("[SEGURIDAD] %s\n"), enabled ? "ACTIVADO" : "DESACTIVADO");
 }
 
 void RobotController::updateCommandTime() {
